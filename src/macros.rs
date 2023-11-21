@@ -59,8 +59,11 @@ macro_rules! build_node_field {
             self
         }
 
-        pub fn selectable(mut self: Box<Self>) -> Box<Self> {
-            self.node.selectable = true;
+        pub fn interaction(
+            mut self: Box<Self>,
+            interaction: $crate::prelude::NodeInteraction,
+        ) -> Box<Self> {
+            self.node.interaction = interaction;
             self
         }
     };

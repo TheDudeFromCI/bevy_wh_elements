@@ -1,15 +1,15 @@
 use bevy::prelude::*;
 
-use crate::prelude::{BoxedElement, WhElement, WhFlags, WhNode};
+use crate::prelude::{BoxedElement, WhElement, WhNode};
 use crate::{build_children_field, build_node_field};
 
-pub struct WhDiv<Flags: WhFlags> {
+pub struct WhDiv<Flags: Bundle> {
     pub flags: Flags,
     pub node: WhNode,
     pub children: Vec<BoxedElement>,
 }
 
-impl<Flags: WhFlags> WhDiv<Flags> {
+impl<Flags: Bundle> WhDiv<Flags> {
     build_node_field!();
     build_children_field!();
 
@@ -22,7 +22,7 @@ impl<Flags: WhFlags> WhDiv<Flags> {
     }
 }
 
-impl<Flags: WhFlags> WhElement for WhDiv<Flags> {
+impl<Flags: Bundle> WhElement for WhDiv<Flags> {
     fn build_child(
         self: Box<Self>,
         commands: &mut Commands,

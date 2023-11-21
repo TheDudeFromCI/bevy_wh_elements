@@ -17,7 +17,7 @@ pub struct WhNode {
     pub flex_grow: f32,
     pub flex_wrap: bool,
     pub aspect_ratio: Option<f32>,
-    pub selectable: bool,
+    pub interaction: NodeInteraction,
 }
 
 impl WhNode {
@@ -28,12 +28,12 @@ impl WhNode {
     ) -> EntityCommands<'w, 's, 'a> {
         let style = self.build_style();
 
-        let focus_policy = match self.selectable {
-            true => FocusPolicy::Block,
-            false => FocusPolicy::Pass,
+        let focus_policy = match self.interaction {
+            NodeInteraction::None => FocusPolicy::Pass,
+            _ => FocusPolicy::Block,
         };
 
-        match self.background {
+        let mut cmd = match self.background {
             NodeBackground::None => commands.spawn(NodeBundle {
                 style,
                 focus_policy,
@@ -52,7 +52,36 @@ impl WhNode {
                 image: loader.load(bg_path).into(),
                 ..default()
             }),
-        }
+            NodeBackground::Bordered {
+                bg,
+                border,
+                thickness,
+            } => commands.spawn(NodeBundle {
+                style: Style {
+                    border: UiRect::all(thickness),
+                    ..style
+                },
+                focus_policy,
+                background_color: bg.into(),
+                border_color: border.into(),
+                ..default()
+            }),
+        };
+
+        match self.interaction {
+            NodeInteraction::None => {}
+            NodeInteraction::Radio(_) => {
+                cmd.insert((Button, Interaction::default()));
+            }
+            NodeInteraction::Button => {
+                cmd.insert((Button, Interaction::default()));
+            }
+            NodeInteraction::Checkbox => {
+                cmd.insert((Button, Interaction::default()));
+            }
+        };
+
+        cmd
     }
 
     pub fn build_style(&self) -> Style {

@@ -1,15 +1,15 @@
 use bevy::prelude::*;
 
-use crate::prelude::{BoxedElement, WhElement, WhNode};
+use crate::prelude::{BoxedElement, NodeInteraction, WhElement, WhNode};
 use crate::{build_children_field, build_node_field};
 
-pub struct WhScreen<Flags: Bundle> {
+pub struct WhButton<Flags: Bundle> {
     pub flags: Flags,
     pub node: WhNode,
     pub children: Vec<BoxedElement>,
 }
 
-impl<Flags: Bundle> WhScreen<Flags> {
+impl<Flags: Bundle> WhButton<Flags> {
     build_node_field!();
     build_children_field!();
 
@@ -17,8 +17,7 @@ impl<Flags: Bundle> WhScreen<Flags> {
         Box::new(Self {
             flags,
             node: WhNode {
-                width: Val::Percent(100.0),
-                height: Val::Percent(100.0),
+                interaction: NodeInteraction::Button,
                 ..default()
             },
             children: Default::default(),
@@ -26,7 +25,7 @@ impl<Flags: Bundle> WhScreen<Flags> {
     }
 }
 
-impl<Flags: Bundle> WhElement for WhScreen<Flags> {
+impl<Flags: Bundle> WhElement for WhButton<Flags> {
     fn build_child(
         self: Box<Self>,
         commands: &mut Commands,

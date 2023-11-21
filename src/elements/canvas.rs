@@ -1,14 +1,14 @@
 use bevy::prelude::*;
 
 use crate::build_children_field;
-use crate::prelude::{BoxedElement, WhElement, WhFlags};
+use crate::prelude::{BoxedElement, WhElement};
 
-pub struct WhCanvas<Flags: WhFlags> {
+pub struct WhCanvas<Flags: Bundle> {
     pub flags: Flags,
     pub children: Vec<BoxedElement>,
 }
 
-impl<Flags: WhFlags> WhCanvas<Flags> {
+impl<Flags: Bundle> WhCanvas<Flags> {
     build_children_field!();
 
     pub fn new(flags: Flags) -> Box<Self> {
@@ -19,7 +19,7 @@ impl<Flags: WhFlags> WhCanvas<Flags> {
     }
 }
 
-impl<Flags: WhFlags> WhElement for WhCanvas<Flags> {
+impl<Flags: Bundle> WhElement for WhCanvas<Flags> {
     fn build_child(
         self: Box<Self>,
         commands: &mut Commands,

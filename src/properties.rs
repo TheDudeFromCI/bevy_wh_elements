@@ -7,7 +7,24 @@ pub enum NodeBackground {
     None,
     Color(Color),
     Image(String),
+    Bordered {
+        bg: Color,
+        border: Color,
+        thickness: Val,
+    },
 }
+
+#[derive(Debug, Default, Clone)]
+pub enum NodeInteraction {
+    #[default]
+    None,
+    Radio(RadioButtonGroup),
+    Button,
+    Checkbox,
+}
+
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct RadioButtonGroup(pub u64);
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ElementDirection {

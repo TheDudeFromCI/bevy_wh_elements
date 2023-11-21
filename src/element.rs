@@ -13,7 +13,4 @@ pub trait WhElement {
     }
 }
 
-pub trait WhFlags: Bundle {}
-impl<T> WhFlags for T where T: Bundle {}
-
 pub type BoxedElement = Box<dyn WhElement + Send + Sync>;
