@@ -36,8 +36,14 @@ pub enum ElementDirection {
 pub enum ElementAlignment {
     #[default]
     Center,
-    Start,
-    End,
+    Left,
+    Right,
+}
+
+#[allow(non_upper_case_globals)]
+impl ElementAlignment {
+    pub const Top: ElementAlignment = ElementAlignment::Left;
+    pub const Bottom: ElementAlignment = ElementAlignment::Right;
 }
 
 #[derive(Debug, Default, Clone)]

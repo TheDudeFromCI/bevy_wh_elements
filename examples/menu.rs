@@ -53,7 +53,7 @@ fn ui() -> BoxedElement {
         WhScreen::new(())
             .background(NodeBackground::Image("bg.png".into()))
             .direction(ElementDirection::Row, Val::Px(0.0))
-            .justify(ElementAlignment::Start)
+            .justify(ElementAlignment::Left)
             .padding(UiRect::all(Val::Px(5.0)))
             .add_child(
                 WhDiv::new(())
@@ -62,9 +62,26 @@ fn ui() -> BoxedElement {
                     .size(Val::Px(250.0), Val::Auto)
                     .padding(UiRect::all(Val::Px(10.0)))
                     .add_children(vec![
-                        button(StartButton, "Start", ElementAlignment::Start),
+                        WhText::new((), ())
+                            .text("This header is extremely long a definitely won't fit in the box")
+                            .background(NodeBackground::Bordered {
+                                bg: Color::NONE,
+                                border: Color::RED,
+                                thickness: Val::Px(2.0),
+                            })
+                            .size(Val::Percent(100.0), Val::Px(100.0)),
+                        button(StartButton, "Start", ElementAlignment::Left),
                         button(SettingsButton, "Settings", ElementAlignment::Center),
-                        button(QuitButton, "Quit", ElementAlignment::End),
+                        button(QuitButton, "Quit", ElementAlignment::Right),
+                        WhText::new((), ())
+                            .text("This footer is also extremely long but no_wrap is set to true")
+                            .background(NodeBackground::Bordered {
+                                bg: Color::NONE,
+                                border: Color::RED,
+                                thickness: Val::Px(2.0),
+                            })
+                            .size(Val::Percent(100.0), Val::Px(100.0))
+                            .no_wrap(),
                     ]),
             ),
     )
@@ -79,13 +96,12 @@ fn button(flags: impl Bundle, text: &str, align: ElementAlignment) -> BoxedEleme
         })
         .size(Val::Percent(100.0), Val::Px(75.0))
         .add_child(
-            WhText::new(())
+            WhText::new((), ())
                 .text(text)
-                .background(NodeBackground::Color(Color::RED))
                 .direction(ElementDirection::Row, Val::Px(0.0))
+                .size(Val::Percent(100.0), Val::Percent(100.0))
                 .justify(align)
                 .align(align)
-                .no_wrap()
                 .padding(UiRect::all(Val::Px(5.0))),
         )
 }

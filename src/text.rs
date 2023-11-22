@@ -1,8 +1,6 @@
 use bevy::ecs::system::EntityCommands;
 use bevy::prelude::*;
-use bevy::text::{BreakLineOn, TextLayoutInfo};
-use bevy::ui::widget::TextFlags;
-use bevy::ui::ContentSize;
+use bevy::text::BreakLineOn;
 
 #[derive(Debug, Clone)]
 pub struct NodeText {
@@ -28,9 +26,18 @@ impl Default for NodeText {
 }
 
 impl NodeText {
-    pub fn insert_text(self, commands: &mut EntityCommands, loader: &AssetServer) {
-        commands.insert((
-            Text {
+    pub fn build_entity<'w, 's, 'a>(
+        self,
+        commands: &'a mut Commands<'w, 's>,
+        loader: &AssetServer,
+    ) -> EntityCommands<'w, 's, 'a> {
+        commands.spawn(TextBundle {
+            style: Style {
+                align_content: AlignContent::Center,
+                align_self: AlignSelf::Center,
+                ..default()
+            },
+            text: Text {
                 linebreak_behavior: match self.wrapping {
                     true => BreakLineOn::WordBoundary,
                     false => BreakLineOn::NoWrap,
@@ -48,9 +55,7 @@ impl NodeText {
                     },
                 }],
             },
-            TextLayoutInfo::default(),
-            TextFlags::default(),
-            ContentSize::default(),
-        ));
+            ..default()
+        })
     }
 }

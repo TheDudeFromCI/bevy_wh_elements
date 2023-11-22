@@ -92,15 +92,15 @@ impl WhNode {
         };
 
         let justify_content = match self.justify {
-            ElementAlignment::Start => JustifyContent::FlexStart,
+            ElementAlignment::Left => JustifyContent::FlexStart,
             ElementAlignment::Center => JustifyContent::Center,
-            ElementAlignment::End => JustifyContent::FlexEnd,
+            ElementAlignment::Right => JustifyContent::FlexEnd,
         };
 
         let align_content = match self.alignment {
-            ElementAlignment::Start => AlignContent::FlexStart,
+            ElementAlignment::Left => AlignContent::FlexStart,
             ElementAlignment::Center => AlignContent::Center,
-            ElementAlignment::End => AlignContent::FlexEnd,
+            ElementAlignment::Right => AlignContent::FlexEnd,
         };
 
         let flex_wrap = match self.no_wrap {
