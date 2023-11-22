@@ -53,6 +53,13 @@ impl WhNode {
                 image: loader.load(bg_path).into(),
                 ..default()
             }),
+            NodeBackground::TintedImage { image, tint } => commands.spawn(ImageBundle {
+                style,
+                focus_policy,
+                background_color: tint.into(),
+                image: loader.load(image).into(),
+                ..default()
+            }),
             NodeBackground::Bordered {
                 bg,
                 border,

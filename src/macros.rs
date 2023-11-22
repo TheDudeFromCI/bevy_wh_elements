@@ -9,6 +9,98 @@ macro_rules! build_node_field {
             self
         }
 
+        pub fn background_color(mut self: Box<Self>, color: bevy::prelude::Color) -> Box<Self> {
+            self.$field.background = match self.$field.background {
+                $crate::prelude::NodeBackground::None => {
+                    $crate::prelude::NodeBackground::Color(color)
+                }
+                $crate::prelude::NodeBackground::Color(_) => {
+                    $crate::prelude::NodeBackground::Color(color)
+                }
+                $crate::prelude::NodeBackground::Image(image) => {
+                    $crate::prelude::NodeBackground::TintedImage { image, tint: color }
+                }
+                $crate::prelude::NodeBackground::TintedImage { image, .. } => {
+                    $crate::prelude::NodeBackground::TintedImage { image, tint: color }
+                }
+                $crate::prelude::NodeBackground::Bordered {
+                    border, thickness, ..
+                } => $crate::prelude::NodeBackground::Bordered {
+                    bg: color,
+                    border,
+                    thickness,
+                },
+            };
+            self
+        }
+
+        pub fn background_img(mut self: Box<Self>, image: impl Into<String>) -> Box<Self> {
+            self.$field.background = match self.$field.background {
+                $crate::prelude::NodeBackground::None => {
+                    $crate::prelude::NodeBackground::Image(image.into())
+                }
+                $crate::prelude::NodeBackground::Color(color) => {
+                    $crate::prelude::NodeBackground::TintedImage {
+                        image: image.into(),
+                        tint: color,
+                    }
+                }
+                $crate::prelude::NodeBackground::Image(_) => {
+                    $crate::prelude::NodeBackground::Image(image.into())
+                }
+                $crate::prelude::NodeBackground::TintedImage { tint, .. } => {
+                    $crate::prelude::NodeBackground::TintedImage {
+                        image: image.into(),
+                        tint,
+                    }
+                }
+                $crate::prelude::NodeBackground::Bordered { bg, .. } => {
+                    $crate::prelude::NodeBackground::TintedImage {
+                        image: image.into(),
+                        tint: bg,
+                    }
+                }
+            };
+            self
+        }
+
+        pub fn border(
+            mut self: Box<Self>,
+            border: bevy::prelude::Color,
+            thickness: bevy::prelude::Val,
+        ) -> Box<Self> {
+            self.$field.background = match self.$field.background {
+                $crate::prelude::NodeBackground::None => {
+                    $crate::prelude::NodeBackground::Bordered {
+                        bg: bevy::prelude::Color::NONE,
+                        border,
+                        thickness,
+                    }
+                }
+                $crate::prelude::NodeBackground::Color(color) => {
+                    $crate::prelude::NodeBackground::Bordered {
+                        bg: color,
+                        border,
+                        thickness,
+                    }
+                }
+                $crate::prelude::NodeBackground::Image(image) => {
+                    $crate::prelude::NodeBackground::Image(image)
+                }
+                $crate::prelude::NodeBackground::TintedImage { image, tint } => {
+                    $crate::prelude::NodeBackground::TintedImage { image, tint }
+                }
+                $crate::prelude::NodeBackground::Bordered { bg, .. } => {
+                    $crate::prelude::NodeBackground::Bordered {
+                        bg,
+                        border,
+                        thickness,
+                    }
+                }
+            };
+            self
+        }
+
         pub fn size(
             mut self: Box<Self>,
             width: bevy::prelude::Val,

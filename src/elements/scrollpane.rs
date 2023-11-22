@@ -132,6 +132,15 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
                     ..default()
                 },
             )),
+            NodeBackground::TintedImage { image, tint } => commands.spawn((
+                self.container_flags,
+                ImageBundle {
+                    style: container_style,
+                    background_color: tint.into(),
+                    image: loader.load(image).into(),
+                    ..default()
+                },
+            )),
             NodeBackground::Bordered {
                 bg,
                 border,

@@ -6,6 +6,10 @@ pub enum NodeBackground {
     None,
     Color(Color),
     Image(String),
+    TintedImage {
+        image: String,
+        tint: Color,
+    },
     Bordered {
         bg: Color,
         border: Color,
@@ -54,17 +58,6 @@ pub enum NodeEffect {
         active: Color,
         inactive: Color,
     },
-}
-
-#[derive(Debug, Default, Component)]
-pub struct SelectableNode {
-    pub effect: NodeEffect,
-}
-
-#[derive(Debug, Event)]
-pub struct SelectNodeEvent {
-    pub entity: Entity,
-    pub selected: bool,
 }
 
 #[derive(Debug, Default, PartialEq, Eq, Hash, Clone, Copy)]

@@ -51,35 +51,27 @@ fn pressed_quit(ui: Query<&Interaction, (Changed<Interaction>, With<QuitButton>)
 fn ui() -> BoxedElement {
     WhCanvas::new(()).add_child(
         WhScreen::new(())
-            .background(NodeBackground::Image("bg.png".into()))
+            .background_img("bg.png")
             .direction(ElementDirection::Row, Val::Px(0.0))
             .justify(ElementAlignment::Left)
             .padding(UiRect::all(Val::Px(5.0)))
             .add_child(
                 WhDiv::new(())
-                    .background(NodeBackground::Color(Color::rgba(0.0, 0.0, 0.0, 0.5)))
+                    .background_color(Color::rgba(0.0, 0.0, 0.0, 0.5))
                     .direction(ElementDirection::Column, Val::Px(10.0))
                     .size(Val::Px(250.0), Val::Auto)
                     .padding(UiRect::all(Val::Px(10.0)))
                     .add_children(vec![
                         WhText::new((), ())
                             .text("This header is extremely long a definitely won't fit in the box")
-                            .background(NodeBackground::Bordered {
-                                bg: Color::NONE,
-                                border: Color::RED,
-                                thickness: Val::Px(2.0),
-                            })
+                            .border(Color::RED, Val::Px(2.0))
                             .size(Val::Percent(100.0), Val::Px(100.0)),
                         button(StartButton, "Start", ElementAlignment::Left),
                         button(SettingsButton, "Settings", ElementAlignment::Center),
                         button(QuitButton, "Quit", ElementAlignment::Right),
                         WhText::new((), ())
                             .text("This footer is also extremely long but no_wrap is set to true")
-                            .background(NodeBackground::Bordered {
-                                bg: Color::NONE,
-                                border: Color::RED,
-                                thickness: Val::Px(2.0),
-                            })
+                            .border(Color::RED, Val::Px(2.0))
                             .size(Val::Percent(100.0), Val::Px(100.0))
                             .no_wrap(),
                     ]),
@@ -89,11 +81,7 @@ fn ui() -> BoxedElement {
 
 fn button(flags: impl Bundle, text: &str, align: ElementAlignment) -> BoxedElement {
     WhButton::new(flags)
-        .background(NodeBackground::Bordered {
-            bg: Color::NONE,
-            border: Color::WHITE,
-            thickness: Val::Px(2.0),
-        })
+        .border(Color::WHITE, Val::Px(2.0))
         .size(Val::Percent(100.0), Val::Px(75.0))
         .add_child(
             WhText::new((), ())
