@@ -66,3 +66,11 @@ pub struct SelectNodeEvent {
     pub entity: Entity,
     pub selected: bool,
 }
+
+#[derive(Debug, Default, PartialEq, Eq, Hash, Clone, Copy)]
+pub enum ScrollDirection {
+    #[default]
+    Vertical,
+    Horizontal,
+    Both,
+}
