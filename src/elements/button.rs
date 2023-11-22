@@ -10,8 +10,8 @@ pub struct WhButton<Flags: Bundle> {
 }
 
 impl<Flags: Bundle> WhButton<Flags> {
-    build_node_field!();
-    build_children_field!();
+    build_node_field!(node);
+    build_children_field!(children);
 
     pub fn new(flags: Flags) -> Box<Self> {
         Box::new(Self {

@@ -53,7 +53,7 @@ fn ui() -> BoxedElement {
         WhScreen::new(())
             .background(NodeBackground::Image("bg.png".into()))
             .direction(ElementDirection::Row, Val::Px(0.0))
-            .justify(ElementJustify::Start)
+            .justify(ElementAlignment::Start)
             .padding(UiRect::all(Val::Px(5.0)))
             .add_child(
                 WhDiv::new(())
@@ -62,20 +62,30 @@ fn ui() -> BoxedElement {
                     .size(Val::Px(250.0), Val::Auto)
                     .padding(UiRect::all(Val::Px(10.0)))
                     .add_children(vec![
-                        button(StartButton, "Start"),
-                        button(SettingsButton, "Settings"),
-                        button(QuitButton, "Quit"),
+                        button(StartButton, "Start", ElementAlignment::Start),
+                        button(SettingsButton, "Settings", ElementAlignment::Center),
+                        button(QuitButton, "Quit", ElementAlignment::End),
                     ]),
             ),
     )
 }
 
-fn button(flags: impl Bundle, _text: &str) -> BoxedElement {
+fn button(flags: impl Bundle, text: &str, align: ElementAlignment) -> BoxedElement {
     WhButton::new(flags)
         .background(NodeBackground::Bordered {
             bg: Color::NONE,
             border: Color::WHITE,
             thickness: Val::Px(2.0),
         })
-        .size(Val::Percent(100.0), Val::Px(30.0))
+        .size(Val::Percent(100.0), Val::Px(75.0))
+        .add_child(
+            WhText::new(())
+                .text(text)
+                .background(NodeBackground::Color(Color::RED))
+                .direction(ElementDirection::Row, Val::Px(0.0))
+                .justify(align)
+                .align(align)
+                .no_wrap()
+                .padding(UiRect::all(Val::Px(5.0))),
+        )
 }

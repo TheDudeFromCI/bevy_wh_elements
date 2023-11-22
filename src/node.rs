@@ -11,11 +11,12 @@ pub struct WhNode {
     pub height: Val,
     pub direction: ElementDirection,
     pub gap: Val,
-    pub justify: ElementJustify,
+    pub justify: ElementAlignment,
+    pub alignment: ElementAlignment,
     pub padding: UiRect,
     pub margin: UiRect,
     pub flex_grow: f32,
-    pub flex_wrap: bool,
+    pub no_wrap: bool,
     pub aspect_ratio: Option<f32>,
     pub interaction: NodeInteraction,
 }
@@ -91,21 +92,27 @@ impl WhNode {
         };
 
         let justify_content = match self.justify {
-            ElementJustify::Start => JustifyContent::FlexStart,
-            ElementJustify::Center => JustifyContent::Center,
-            ElementJustify::End => JustifyContent::FlexEnd,
+            ElementAlignment::Start => JustifyContent::FlexStart,
+            ElementAlignment::Center => JustifyContent::Center,
+            ElementAlignment::End => JustifyContent::FlexEnd,
         };
 
-        let flex_wrap = match self.flex_wrap {
-            true => FlexWrap::Wrap,
-            false => FlexWrap::NoWrap,
+        let align_content = match self.alignment {
+            ElementAlignment::Start => AlignContent::FlexStart,
+            ElementAlignment::Center => AlignContent::Center,
+            ElementAlignment::End => AlignContent::FlexEnd,
+        };
+
+        let flex_wrap = match self.no_wrap {
+            true => FlexWrap::NoWrap,
+            false => FlexWrap::Wrap,
         };
 
         Style {
             flex_direction,
             flex_wrap,
             justify_content,
-            align_items: AlignItems::Center,
+            align_content,
             flex_grow: self.flex_grow,
             row_gap: self.gap,
             column_gap: self.gap,

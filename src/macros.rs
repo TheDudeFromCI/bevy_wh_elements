@@ -1,11 +1,11 @@
 #[macro_export]
 macro_rules! build_node_field {
-    () => {
+    ($field:ident) => {
         pub fn background(
             mut self: Box<Self>,
             background: $crate::prelude::NodeBackground,
         ) -> Box<Self> {
-            self.node.background = background;
+            self.$field.background = background;
             self
         }
 
@@ -14,8 +14,8 @@ macro_rules! build_node_field {
             width: bevy::prelude::Val,
             height: bevy::prelude::Val,
         ) -> Box<Self> {
-            self.node.width = width;
-            self.node.height = height;
+            self.$field.width = width;
+            self.$field.height = height;
             self
         }
 
@@ -24,38 +24,49 @@ macro_rules! build_node_field {
             direction: $crate::prelude::ElementDirection,
             gap: bevy::prelude::Val,
         ) -> Box<Self> {
-            self.node.direction = direction;
-            self.node.gap = gap;
+            self.$field.direction = direction;
+            self.$field.gap = gap;
             self
         }
 
-        pub fn justify(mut self: Box<Self>, justify: $crate::prelude::ElementJustify) -> Box<Self> {
-            self.node.justify = justify;
+        pub fn justify(
+            mut self: Box<Self>,
+            justify: $crate::prelude::ElementAlignment,
+        ) -> Box<Self> {
+            self.$field.justify = justify;
+            self
+        }
+
+        pub fn align(
+            mut self: Box<Self>,
+            alignment: $crate::prelude::ElementAlignment,
+        ) -> Box<Self> {
+            self.$field.alignment = alignment;
             self
         }
 
         pub fn padding(mut self: Box<Self>, padding: bevy::prelude::UiRect) -> Box<Self> {
-            self.node.padding = padding;
+            self.$field.padding = padding;
             self
         }
 
         pub fn margin(mut self: Box<Self>, margin: bevy::prelude::UiRect) -> Box<Self> {
-            self.node.margin = margin;
+            self.$field.margin = margin;
             self
         }
 
         pub fn growing(mut self: Box<Self>) -> Box<Self> {
-            self.node.flex_grow = 1.0;
+            self.$field.flex_grow = 1.0;
             self
         }
 
-        pub fn wrap_contents(mut self: Box<Self>) -> Box<Self> {
-            self.node.flex_wrap = true;
+        pub fn no_wrap(mut self: Box<Self>) -> Box<Self> {
+            self.$field.no_wrap = true;
             self
         }
 
         pub fn aspect_ratio(mut self: Box<Self>, ratio: f32) -> Box<Self> {
-            self.node.aspect_ratio = Some(ratio);
+            self.$field.aspect_ratio = Some(ratio);
             self
         }
 
@@ -63,7 +74,7 @@ macro_rules! build_node_field {
             mut self: Box<Self>,
             interaction: $crate::prelude::NodeInteraction,
         ) -> Box<Self> {
-            self.node.interaction = interaction;
+            self.$field.interaction = interaction;
             self
         }
     };
@@ -71,17 +82,42 @@ macro_rules! build_node_field {
 
 #[macro_export]
 macro_rules! build_children_field {
-    () => {
+    ($field:ident) => {
         pub fn add_children(
             mut self: Box<Self>,
             mut children: Vec<$crate::prelude::BoxedElement>,
         ) -> Box<Self> {
-            self.children.append(&mut children);
+            self.$field.append(&mut children);
             self
         }
 
         pub fn add_child(mut self: Box<Self>, child: $crate::prelude::BoxedElement) -> Box<Self> {
-            self.children.push(child);
+            self.$field.push(child);
+            self
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! build_text_field {
+    ($field:ident) => {
+        pub fn text(mut self: Box<Self>, text: impl Into<String>) -> Box<Self> {
+            self.$field.text = text.into();
+            self
+        }
+
+        pub fn font(mut self: Box<Self>, font: impl Into<String>) -> Box<Self> {
+            self.$field.font = Some(font.into());
+            self
+        }
+
+        pub fn font_size(mut self: Box<Self>, size: f32) -> Box<Self> {
+            self.$field.size = size;
+            self
+        }
+
+        pub fn text_color(mut self: Box<Self>, color: bevy::prelude::Color) -> Box<Self> {
+            self.$field.color = color;
             self
         }
     };

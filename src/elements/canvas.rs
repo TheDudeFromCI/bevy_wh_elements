@@ -9,7 +9,7 @@ pub struct WhCanvas<Flags: Bundle> {
 }
 
 impl<Flags: Bundle> WhCanvas<Flags> {
-    build_children_field!();
+    build_children_field!(children);
 
     pub fn new(flags: Flags) -> Box<Self> {
         Box::new(Self {
