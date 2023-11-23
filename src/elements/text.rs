@@ -10,11 +10,17 @@ pub struct WhText<ContainerFlags: Bundle, TextFlags: Bundle> {
     pub text: NodeText,
 }
 
+impl WhText<(), ()> {
+    pub fn new() -> Box<Self> {
+        Self::with_flags((), ())
+    }
+}
+
 impl<ContainerFlags: Bundle, TextFlags: Bundle> WhText<ContainerFlags, TextFlags> {
     build_node_field!(node);
     build_text_field!(text);
 
-    pub fn new(container_flags: ContainerFlags, text_flags: TextFlags) -> Box<Self> {
+    pub fn with_flags(container_flags: ContainerFlags, text_flags: TextFlags) -> Box<Self> {
         Box::new(Self {
             container_flags,
             text_flags,

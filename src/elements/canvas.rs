@@ -8,10 +8,16 @@ pub struct WhCanvas<Flags: Bundle> {
     pub children: Vec<BoxedElement>,
 }
 
+impl WhCanvas<()> {
+    pub fn new() -> Box<Self> {
+        Self::with_flags(())
+    }
+}
+
 impl<Flags: Bundle> WhCanvas<Flags> {
     build_children_field!(children);
 
-    pub fn new(flags: Flags) -> Box<Self> {
+    pub fn with_flags(flags: Flags) -> Box<Self> {
         Box::new(Self {
             flags,
             children: Default::default(),

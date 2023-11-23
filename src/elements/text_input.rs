@@ -19,11 +19,17 @@ pub struct WhTextInput<ContainerFlags: Bundle, TextFlags: Bundle> {
     pub text: NodeText,
 }
 
+impl WhTextInput<(), ()> {
+    pub fn new() -> Box<Self> {
+        Self::with_flags((), ())
+    }
+}
+
 impl<ContainerFlags: Bundle, TextFlags: Bundle> WhTextInput<ContainerFlags, TextFlags> {
     build_node_field!(node);
     build_text_field!(text);
 
-    pub fn new(container_flags: ContainerFlags, text_flags: TextFlags) -> Box<Self> {
+    pub fn with_flags(container_flags: ContainerFlags, text_flags: TextFlags) -> Box<Self> {
         Box::new(Self {
             container_flags,
             text_flags,
@@ -31,6 +37,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhTextInput<ContainerFlags, Text
                 direction: ElementDirection::Row,
                 justify: ElementAlignment::Left,
                 alignment: ElementAlignment::Center,
+                padding: UiRect::all(Val::Px(2.0)),
                 ..default()
             },
             text: NodeText {

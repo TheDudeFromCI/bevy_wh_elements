@@ -15,12 +15,12 @@ fn init(asset_server: Res<AssetServer>, mut commands: Commands) {
 }
 
 fn ui() -> BoxedElement {
-    WhCanvas::new(()) //
+    WhCanvas::new() //
         .add_child(
-            WhScreen::new(()) //
+            WhScreen::new() //
                 .bg_img("bg.png")
                 .add_child(
-                    WhScrollPane::new((), ())
+                    WhScrollPane::new()
                         .bg_color(Color::rgba(0.0, 0.0, 0.0, 0.5))
                         .border(Color::WHITE, Val::Px(1.0))
                         .size(Val::Percent(50.0), Val::Percent(50.0))
@@ -59,7 +59,7 @@ fn ui() -> BoxedElement {
 }
 
 fn list_elem(text: &str) -> BoxedElement {
-    WhText::new((), ())
+    WhText::new()
         .bg_color(Color::rgba(0.0, 0.0, 0.0, 0.5))
         .size(Val::Percent(100.0), Val::Px(20.0))
         .text(text)

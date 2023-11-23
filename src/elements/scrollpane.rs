@@ -21,11 +21,17 @@ pub struct WhScrollPane<ContainerFlags: Bundle, PanelFlags: Bundle> {
     pub scroll_direction: ScrollDirection,
 }
 
+impl WhScrollPane<(), ()> {
+    pub fn new() -> Box<Self> {
+        Self::with_flags((), ())
+    }
+}
+
 impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhScrollPane<ContainerFlags, PanelFlags> {
     build_node_field!(node);
     build_children_field!(children);
 
-    pub fn new(container_flags: ContainerFlags, panel_flags: PanelFlags) -> Box<Self> {
+    pub fn with_flags(container_flags: ContainerFlags, panel_flags: PanelFlags) -> Box<Self> {
         Box::new(Self {
             container_flags,
             panel_flags,
