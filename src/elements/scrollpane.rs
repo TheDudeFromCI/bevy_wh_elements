@@ -48,20 +48,9 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhScrollPane<ContainerFlags, Pa
         self.scroll_direction = scroll_direction;
         self
     }
-}
 
-impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
-    for WhScrollPane<ContainerFlags, PanelFlags>
-{
-    fn build_child(
-        self: Box<Self>,
-        commands: &mut Commands,
-        loader: &AssetServer,
-        parent: Option<Entity>,
-    ) {
-        let interaction_clone = self.node.clone();
-
-        let container_style = Style {
+    fn container_style(&self) -> Style {
+        Style {
             flex_direction: match self.scroll_direction {
                 ScrollDirection::Vertical => FlexDirection::Column,
                 ScrollDirection::Horizontal => FlexDirection::Row,
@@ -77,9 +66,11 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
             overflow: Overflow::clip(),
             border: UiRect::all(self.node.border_thickness),
             ..default()
-        };
+        }
+    }
 
-        let panel_style = Style {
+    fn panel_style(&self) -> Style {
+        Style {
             flex_direction: match self.node.direction {
                 ElementDirection::Row => FlexDirection::Row,
                 ElementDirection::Column => FlexDirection::Column,
@@ -113,9 +104,24 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
             },
             align_self: AlignSelf::Stretch,
             ..default()
-        };
+        }
+    }
+}
 
-        let mut cmd = match self.node.bg_img {
+impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
+    for WhScrollPane<ContainerFlags, PanelFlags>
+{
+    fn build_child(
+        self: Box<Self>,
+        commands: &mut Commands,
+        loader: &AssetServer,
+        parent: Option<Entity>,
+    ) {
+        let interaction_clone = self.node.clone();
+        let container_style = self.container_style();
+        let panel_style = self.panel_style();
+
+        let mut container_cmd = match self.node.bg_img {
             None => commands.spawn(NodeBundle {
                 style: container_style,
                 background_color: self.node.bg_color.into(),
@@ -129,16 +135,14 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
                 ..default()
             }),
         };
-        let container_id = cmd.id();
-
+        let container_id = container_cmd.id();
         if let Some(parent) = parent {
-            cmd.set_parent(parent);
+            container_cmd.set_parent(parent);
         }
 
-        let mut cmd = commands.spawn((
+        let mut panel_cmd = commands.spawn((
             self.panel_flags,
             ScrollPane::default(),
-            Interaction::default(),
             NodeBundle {
                 style: panel_style,
                 focus_policy: match self.node.interaction {
@@ -148,11 +152,10 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
                 ..default()
             },
         ));
-        interaction_clone.insert_interaction(&mut cmd);
+        interaction_clone.insert_interaction(&mut panel_cmd);
+        panel_cmd.set_parent(container_id);
 
-        cmd.set_parent(container_id);
-        let panel_id = cmd.id();
-
+        let panel_id = panel_cmd.id();
         for child in self.children {
             child.build_child(commands, loader, Some(panel_id));
         }
