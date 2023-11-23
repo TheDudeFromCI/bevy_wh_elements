@@ -1,23 +1,6 @@
 use bevy::prelude::*;
 
 #[derive(Debug, Default, Clone)]
-pub enum NodeBackground {
-    #[default]
-    None,
-    Color(Color),
-    Image(String),
-    TintedImage {
-        image: String,
-        tint: Color,
-    },
-    Bordered {
-        bg: Color,
-        border: Color,
-        thickness: Val,
-    },
-}
-
-#[derive(Debug, Default, Clone)]
 pub enum NodeInteraction {
     #[default]
     None,

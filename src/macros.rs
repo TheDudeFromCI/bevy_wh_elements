@@ -1,66 +1,18 @@
 #[macro_export]
 macro_rules! build_node_field {
     ($field:ident) => {
-        pub fn background(
-            mut self: Box<Self>,
-            background: $crate::prelude::NodeBackground,
-        ) -> Box<Self> {
-            self.$field.background = background;
+        pub fn bg_color(mut self: Box<Self>, color: bevy::prelude::Color) -> Box<Self> {
+            self.$field.bg_color = color;
             self
         }
 
-        pub fn background_color(mut self: Box<Self>, color: bevy::prelude::Color) -> Box<Self> {
-            self.$field.background = match self.$field.background {
-                $crate::prelude::NodeBackground::None => {
-                    $crate::prelude::NodeBackground::Color(color)
-                }
-                $crate::prelude::NodeBackground::Color(_) => {
-                    $crate::prelude::NodeBackground::Color(color)
-                }
-                $crate::prelude::NodeBackground::Image(image) => {
-                    $crate::prelude::NodeBackground::TintedImage { image, tint: color }
-                }
-                $crate::prelude::NodeBackground::TintedImage { image, .. } => {
-                    $crate::prelude::NodeBackground::TintedImage { image, tint: color }
-                }
-                $crate::prelude::NodeBackground::Bordered {
-                    border, thickness, ..
-                } => $crate::prelude::NodeBackground::Bordered {
-                    bg: color,
-                    border,
-                    thickness,
-                },
-            };
-            self
-        }
+        pub fn bg_img(mut self: Box<Self>, image: impl Into<String>) -> Box<Self> {
+            self.$field.bg_img = Some(image.into());
 
-        pub fn background_img(mut self: Box<Self>, image: impl Into<String>) -> Box<Self> {
-            self.$field.background = match self.$field.background {
-                $crate::prelude::NodeBackground::None => {
-                    $crate::prelude::NodeBackground::Image(image.into())
-                }
-                $crate::prelude::NodeBackground::Color(color) => {
-                    $crate::prelude::NodeBackground::TintedImage {
-                        image: image.into(),
-                        tint: color,
-                    }
-                }
-                $crate::prelude::NodeBackground::Image(_) => {
-                    $crate::prelude::NodeBackground::Image(image.into())
-                }
-                $crate::prelude::NodeBackground::TintedImage { tint, .. } => {
-                    $crate::prelude::NodeBackground::TintedImage {
-                        image: image.into(),
-                        tint,
-                    }
-                }
-                $crate::prelude::NodeBackground::Bordered { bg, .. } => {
-                    $crate::prelude::NodeBackground::TintedImage {
-                        image: image.into(),
-                        tint: bg,
-                    }
-                }
-            };
+            if self.$field.bg_color == bevy::prelude::Color::NONE {
+                self.$field.bg_color = bevy::prelude::Color::WHITE;
+            }
+
             self
         }
 
@@ -69,35 +21,8 @@ macro_rules! build_node_field {
             border: bevy::prelude::Color,
             thickness: bevy::prelude::Val,
         ) -> Box<Self> {
-            self.$field.background = match self.$field.background {
-                $crate::prelude::NodeBackground::None => {
-                    $crate::prelude::NodeBackground::Bordered {
-                        bg: bevy::prelude::Color::NONE,
-                        border,
-                        thickness,
-                    }
-                }
-                $crate::prelude::NodeBackground::Color(color) => {
-                    $crate::prelude::NodeBackground::Bordered {
-                        bg: color,
-                        border,
-                        thickness,
-                    }
-                }
-                $crate::prelude::NodeBackground::Image(image) => {
-                    $crate::prelude::NodeBackground::Image(image)
-                }
-                $crate::prelude::NodeBackground::TintedImage { image, tint } => {
-                    $crate::prelude::NodeBackground::TintedImage { image, tint }
-                }
-                $crate::prelude::NodeBackground::Bordered { bg, .. } => {
-                    $crate::prelude::NodeBackground::Bordered {
-                        bg,
-                        border,
-                        thickness,
-                    }
-                }
-            };
+            self.$field.border_color = border;
+            self.$field.border_thickness = thickness;
             self
         }
 

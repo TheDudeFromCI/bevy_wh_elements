@@ -5,7 +5,6 @@ use crate::prelude::{
     BoxedElement,
     ElementAlignment,
     ElementDirection,
-    NodeBackground,
     NodeInteraction,
     ScrollDirection,
     ScrollPane,
@@ -68,6 +67,7 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
             margin: self.node.margin,
             aspect_ratio: self.node.aspect_ratio,
             overflow: Overflow::clip(),
+            border: UiRect::all(self.node.border_thickness),
             ..default()
         };
 
@@ -107,56 +107,19 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
             ..default()
         };
 
-        let mut cmd = match self.node.background {
-            NodeBackground::None => commands.spawn((
-                self.container_flags,
-                NodeBundle {
-                    style: container_style,
-                    background_color: Color::NONE.into(),
-                    ..default()
-                },
-            )),
-            NodeBackground::Color(color) => commands.spawn((
-                self.container_flags,
-                NodeBundle {
-                    style: container_style,
-                    background_color: color.into(),
-                    ..default()
-                },
-            )),
-            NodeBackground::Image(bg_path) => commands.spawn((
-                self.container_flags,
-                ImageBundle {
-                    style: container_style,
-                    image: loader.load(bg_path).into(),
-                    ..default()
-                },
-            )),
-            NodeBackground::TintedImage { image, tint } => commands.spawn((
-                self.container_flags,
-                ImageBundle {
-                    style: container_style,
-                    background_color: tint.into(),
-                    image: loader.load(image).into(),
-                    ..default()
-                },
-            )),
-            NodeBackground::Bordered {
-                bg,
-                border,
-                thickness,
-            } => commands.spawn((
-                self.container_flags,
-                NodeBundle {
-                    style: Style {
-                        border: UiRect::all(thickness),
-                        ..container_style
-                    },
-                    background_color: bg.into(),
-                    border_color: border.into(),
-                    ..default()
-                },
-            )),
+        let mut cmd = match self.node.bg_img {
+            None => commands.spawn(NodeBundle {
+                style: container_style,
+                background_color: self.node.bg_color.into(),
+                border_color: self.node.border_color.into(),
+                ..default()
+            }),
+            Some(bg_path) => commands.spawn(ImageBundle {
+                style: container_style,
+                background_color: self.node.bg_color.into(),
+                image: loader.load(bg_path).into(),
+                ..default()
+            }),
         };
         let container_id = cmd.id();
 

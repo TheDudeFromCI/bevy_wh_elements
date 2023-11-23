@@ -4,9 +4,11 @@ use bevy::ui::FocusPolicy;
 
 use super::properties::*;
 
-#[derive(Default)]
 pub struct WhNode {
-    pub background: NodeBackground,
+    pub bg_color: Color,
+    pub bg_img: Option<String>,
+    pub border_color: Color,
+    pub border_thickness: Val,
     pub width: Val,
     pub height: Val,
     pub direction: ElementDirection,
@@ -19,6 +21,29 @@ pub struct WhNode {
     pub no_wrap: bool,
     pub aspect_ratio: Option<f32>,
     pub interaction: NodeInteraction,
+}
+
+impl Default for WhNode {
+    fn default() -> Self {
+        Self {
+            bg_color: Color::NONE,
+            bg_img: Default::default(),
+            border_color: Color::NONE,
+            border_thickness: Val::ZERO,
+            width: Default::default(),
+            height: Default::default(),
+            direction: Default::default(),
+            gap: Default::default(),
+            justify: Default::default(),
+            alignment: Default::default(),
+            padding: Default::default(),
+            margin: Default::default(),
+            flex_grow: Default::default(),
+            no_wrap: Default::default(),
+            aspect_ratio: Default::default(),
+            interaction: Default::default(),
+        }
+    }
 }
 
 impl WhNode {
@@ -34,44 +59,19 @@ impl WhNode {
             _ => FocusPolicy::Block,
         };
 
-        let mut cmd = match self.background {
-            NodeBackground::None => commands.spawn(NodeBundle {
+        let mut cmd = match self.bg_img {
+            None => commands.spawn(NodeBundle {
                 style,
                 focus_policy,
-                background_color: Color::NONE.into(),
+                background_color: self.bg_color.into(),
+                border_color: self.border_color.into(),
                 ..default()
             }),
-            NodeBackground::Color(color) => commands.spawn(NodeBundle {
+            Some(bg_path) => commands.spawn(ImageBundle {
                 style,
                 focus_policy,
-                background_color: color.into(),
-                ..default()
-            }),
-            NodeBackground::Image(bg_path) => commands.spawn(ImageBundle {
-                style,
-                focus_policy,
+                background_color: self.bg_color.into(),
                 image: loader.load(bg_path).into(),
-                ..default()
-            }),
-            NodeBackground::TintedImage { image, tint } => commands.spawn(ImageBundle {
-                style,
-                focus_policy,
-                background_color: tint.into(),
-                image: loader.load(image).into(),
-                ..default()
-            }),
-            NodeBackground::Bordered {
-                bg,
-                border,
-                thickness,
-            } => commands.spawn(NodeBundle {
-                style: Style {
-                    border: UiRect::all(thickness),
-                    ..style
-                },
-                focus_policy,
-                background_color: bg.into(),
-                border_color: border.into(),
                 ..default()
             }),
         };
@@ -128,6 +128,7 @@ impl WhNode {
             padding: self.padding,
             margin: self.margin,
             aspect_ratio: self.aspect_ratio,
+            border: UiRect::all(self.border_thickness),
             ..default()
         }
     }

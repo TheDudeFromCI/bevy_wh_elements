@@ -51,13 +51,13 @@ fn pressed_quit(ui: Query<&Interaction, (Changed<Interaction>, With<QuitButton>)
 fn ui() -> BoxedElement {
     WhCanvas::new(()).add_child(
         WhScreen::new(())
-            .background_img("bg.png")
+            .bg_img("bg.png")
             .direction(ElementDirection::Row, Val::Px(0.0))
             .justify(ElementAlignment::Left)
             .padding(UiRect::all(Val::Px(5.0)))
             .add_child(
                 WhDiv::new(())
-                    .background_color(Color::rgba(0.0, 0.0, 0.0, 0.5))
+                    .bg_color(Color::rgba(0.0, 0.0, 0.0, 0.5))
                     .direction(ElementDirection::Column, Val::Px(10.0))
                     .size(Val::Px(250.0), Val::Auto)
                     .padding(UiRect::all(Val::Px(10.0)))
