@@ -1,9 +1,13 @@
+use bevy::log::LogPlugin;
 use bevy::prelude::*;
 use bevy_wh_elements::prelude::*;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(LogPlugin {
+            level: bevy::log::Level::DEBUG,
+            ..default()
+        }))
         .add_plugins(WhElementsPlugin)
         .add_systems(Startup, init)
         .add_systems(Update, (pressed_start, pressed_settings, pressed_quit))
