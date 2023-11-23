@@ -12,18 +12,27 @@ use crate::prelude::{
 };
 
 pub(super) fn mouse_scroll_pane(
-    query_node: Query<&Node>,
-    mut query_list: Query<(&mut ScrollPane, &mut Style, &Parent, &Node, &Interaction)>,
+    query_windows: Query<&Window>,
+    query_node: Query<(&Node, &GlobalTransform)>,
+    mut query_list: Query<(&mut ScrollPane, &mut Style, &Parent, &Node)>,
     mut mouse_wheel_evs: EventReader<MouseWheel>,
 ) {
     for ev in mouse_wheel_evs.read() {
-        for (mut scrolling_list, mut style, parent, list_node, interaction) in &mut query_list {
-            if interaction != &Interaction::Hovered {
+        for (mut scrolling_list, mut style, parent, list_node) in &mut query_list {
+            let (parent_node, transform) = query_node.get(parent.get()).unwrap();
+
+            let window = query_windows.get(ev.window).unwrap();
+            let Some(cursor_pos) = window.cursor_position() else {
+                continue;
+            };
+
+            let node_rect = parent_node.logical_rect(transform);
+            if !node_rect.contains(cursor_pos) {
                 continue;
             }
 
             let items_size = list_node.size();
-            let container_size = query_node.get(parent.get()).unwrap().size();
+            let container_size = parent_node.size();
             let max_scroll = (items_size - container_size).max(Vec2::ZERO);
 
             let scroll_amount = Vec2::new(ev.x, ev.y);
