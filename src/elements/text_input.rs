@@ -110,7 +110,10 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
                 },
                 text: Text {
                     linebreak_behavior: match self.text.wrapping {
-                        true => BreakLineOn::WordBoundary,
+                        // TODO: This is a hack to get around the fact that
+                        //       bevy doesn't support wrapping on long words.
+                        // Waiting on: <https://github.com/bevyengine/bevy/issues/10710>
+                        true => BreakLineOn::AnyCharacter,
                         false => BreakLineOn::NoWrap,
                     },
                     alignment: self.text.alignment,
