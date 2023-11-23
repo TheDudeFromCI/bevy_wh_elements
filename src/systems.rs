@@ -142,7 +142,7 @@ pub(super) fn focus_on_element(
         for (entity, mut focusable) in query_focusable.iter_mut() {
             focusable.focused = entity == focused;
         }
-        info!("focused: {:?}", focused);
+        debug!("Focused Element: {:?}", focused);
     }
 }
 
@@ -157,7 +157,7 @@ pub(super) fn unfocus_elements(
         for mut focusable in query_focusable.iter_mut() {
             focusable.focused = false;
         }
-        info!("unfocused all");
+        debug!("Unfocused all elements");
     }
 }
 
@@ -170,11 +170,6 @@ pub(super) fn text_input_from_focus(
         let overflow_id = parent.get();
         let container_id = query_hierarchy.get(overflow_id).unwrap().get();
         let focusable = query_focusable.get(container_id).unwrap();
-
-        if text_input.active != focusable.focused {
-            info!("text_input.active: {:?}", focusable.focused);
-        }
-
         text_input.active = focusable.focused;
     }
 }
