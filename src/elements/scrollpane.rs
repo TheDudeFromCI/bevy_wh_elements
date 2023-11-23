@@ -59,6 +59,8 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
         loader: &AssetServer,
         parent: Option<Entity>,
     ) {
+        let interaction_clone = self.node.clone();
+
         let container_style = Style {
             flex_direction: match self.scroll_direction {
                 ScrollDirection::Vertical => FlexDirection::Column,
@@ -146,12 +148,7 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
                 ..default()
             },
         ));
-        match self.node.interaction {
-            NodeInteraction::None => {}
-            _ => {
-                cmd.insert(Button);
-            }
-        };
+        interaction_clone.insert_interaction(&mut cmd);
 
         cmd.set_parent(container_id);
         let panel_id = cmd.id();

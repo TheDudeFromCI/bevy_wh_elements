@@ -28,12 +28,15 @@ impl Plugin for WhElementsPlugin {
         app.add_systems(
             Update,
             (
-                systems::mouse_scroll_pane.in_set(SystemSets::UserInteraction),
-                systems::keyboard_text_input.in_set(SystemSets::UserInteraction),
-                systems::text_cursor_blinker.in_set(SystemSets::Animations),
                 systems::focus_on_element.in_set(SystemSets::UpdateFocus),
                 systems::unfocus_elements.in_set(SystemSets::UpdateFocus),
                 systems::text_input_from_focus.in_set(SystemSets::InheritFocus),
+                systems::mouse_scroll_pane.in_set(SystemSets::UserInteraction),
+                systems::keyboard_text_input.in_set(SystemSets::UserInteraction),
+                systems::select_radio_button.in_set(SystemSets::UserInteraction),
+                systems::text_cursor_blinker.in_set(SystemSets::Animations),
+                systems::change_border_on_focus.in_set(SystemSets::Animations),
+                systems::change_border_on_radio.in_set(SystemSets::Animations),
             ),
         )
         .configure_sets(
@@ -44,6 +47,15 @@ impl Plugin for WhElementsPlugin {
                 SystemSets::UserInteraction,
             )
                 .chain(),
+        )
+        .configure_sets(
+            Update,
+            (
+                SystemSets::Animations.ambiguous_with(SystemSets::UpdateFocus),
+                SystemSets::Animations.ambiguous_with(SystemSets::InheritFocus),
+                SystemSets::Animations.ambiguous_with(SystemSets::UserInteraction),
+                SystemSets::Animations.ambiguous_with(SystemSets::Animations),
+            ),
         );
     }
 }

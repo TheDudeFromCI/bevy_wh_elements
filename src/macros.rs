@@ -23,6 +23,12 @@ macro_rules! build_node_field {
         ) -> Box<Self> {
             self.$field.border_color = border;
             self.$field.border_thickness = thickness;
+
+            if let Some(active) = &mut self.$field.active_border {
+                active.unfocused_color = border;
+                active.unfocused_thickness = thickness;
+            }
+
             self
         }
 
@@ -92,6 +98,20 @@ macro_rules! build_node_field {
             interaction: $crate::prelude::NodeInteraction,
         ) -> Box<Self> {
             self.$field.interaction = interaction;
+            self
+        }
+
+        pub fn change_border_on_active(
+            mut self: Box<Self>,
+            focused_color: bevy::prelude::Color,
+            focused_thickness: bevy::prelude::Val,
+        ) -> Box<Self> {
+            self.$field.active_border = Some($crate::prelude::BorderChangeOnActive {
+                focused_color,
+                focused_thickness,
+                unfocused_color: self.$field.border_color,
+                unfocused_thickness: self.$field.border_thickness,
+            });
             self
         }
     };

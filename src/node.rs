@@ -3,8 +3,9 @@ use bevy::prelude::*;
 use bevy::ui::FocusPolicy;
 
 use super::properties::*;
-use crate::prelude::FocusableElement;
+use crate::prelude::{BorderChangeOnActive, FocusableElement, RadioButtonElement};
 
+#[derive(Debug, Clone)]
 pub struct WhNode {
     pub bg_color: Color,
     pub bg_img: Option<String>,
@@ -22,6 +23,7 @@ pub struct WhNode {
     pub no_wrap: bool,
     pub aspect_ratio: Option<f32>,
     pub interaction: NodeInteraction,
+    pub active_border: Option<BorderChangeOnActive>,
 }
 
 impl Default for WhNode {
@@ -43,6 +45,7 @@ impl Default for WhNode {
             no_wrap: Default::default(),
             aspect_ratio: Default::default(),
             interaction: Default::default(),
+            active_border: Default::default(),
         }
     }
 }
@@ -54,6 +57,7 @@ impl WhNode {
         loader: &AssetServer,
     ) -> EntityCommands<'w, 's, 'a> {
         let style = self.build_style();
+        let interaction_clone = self.clone();
 
         let focus_policy = match self.interaction {
             NodeInteraction::None => FocusPolicy::Pass,
@@ -76,18 +80,38 @@ impl WhNode {
                 ..default()
             }),
         };
-
-        match self.interaction {
-            NodeInteraction::None => {}
-            NodeInteraction::Focusable => {
-                cmd.insert((Button, FocusableElement::default(), Interaction::default()));
-            }
-            _ => {
-                cmd.insert((Button, Interaction::default()));
-            }
-        };
+        interaction_clone.insert_interaction(&mut cmd);
 
         cmd
+    }
+
+    pub fn insert_interaction(self, cmd: &mut EntityCommands) {
+        match self.interaction {
+            NodeInteraction::None => {}
+            NodeInteraction::Button => {
+                cmd.insert((Button, Interaction::default()));
+            }
+            NodeInteraction::Checkbox => {
+                todo!();
+            }
+            NodeInteraction::Radio(group) => {
+                cmd.insert((
+                    Button,
+                    Interaction::default(),
+                    RadioButtonElement {
+                        group,
+                        selected: false,
+                    },
+                ));
+
+                if let Some(active) = self.active_border {
+                    cmd.insert(active);
+                }
+            }
+            NodeInteraction::Focusable => {
+                cmd.insert((Button, Interaction::default(), FocusableElement::default()));
+            }
+        };
     }
 
     pub fn build_style(&self) -> Style {

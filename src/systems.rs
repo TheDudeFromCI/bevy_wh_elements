@@ -2,7 +2,14 @@ use bevy::input::keyboard::KeyboardInput;
 use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
 use bevy::prelude::*;
 
-use crate::prelude::{CursorTimer, FocusableElement, ScrollPane, TextInput};
+use crate::prelude::{
+    BorderChangeOnActive,
+    CursorTimer,
+    FocusableElement,
+    RadioButtonElement,
+    ScrollPane,
+    TextInput,
+};
 
 pub(super) fn mouse_scroll_pane(
     query_node: Query<&Node>,
@@ -171,5 +178,73 @@ pub(super) fn text_input_from_focus(
         let container_id = query_hierarchy.get(overflow_id).unwrap().get();
         let focusable = query_focusable.get(container_id).unwrap();
         text_input.active = focusable.focused;
+    }
+}
+
+#[allow(clippy::type_complexity)]
+pub(super) fn select_radio_button(
+    query_clicked: Query<(Entity, &Interaction), (Changed<Interaction>, With<RadioButtonElement>)>,
+    mut radio_buttons: Query<(Entity, &mut RadioButtonElement)>,
+) {
+    let mut selected = None;
+    for (entity, interaction) in query_clicked.iter() {
+        if let Interaction::Pressed = interaction {
+            if let Ok((_, radio_button)) = radio_buttons.get(entity) {
+                selected = Some((entity, radio_button.group));
+            }
+        }
+    }
+
+    if let Some((entity, group)) = selected {
+        for (other_entity, mut other_radio) in radio_buttons.iter_mut() {
+            if other_radio.group == group {
+                other_radio.selected = other_entity == entity;
+            }
+        }
+        debug!("Selected Radio Button: {:?} in group: {:?}", entity, group);
+    }
+}
+
+pub(super) fn change_border_on_focus(
+    mut query_focused: Query<
+        (
+            &mut Style,
+            &mut BorderColor,
+            &BorderChangeOnActive,
+            &FocusableElement,
+        ),
+        Changed<FocusableElement>,
+    >,
+) {
+    for (mut style, mut border, effects, focus) in query_focused.iter_mut() {
+        if focus.focused {
+            style.border = UiRect::all(effects.focused_thickness);
+            *border = effects.focused_color.into();
+        } else {
+            style.border = UiRect::all(effects.unfocused_thickness);
+            *border = effects.unfocused_color.into();
+        }
+    }
+}
+
+pub(super) fn change_border_on_radio(
+    mut query_selected: Query<
+        (
+            &mut Style,
+            &mut BorderColor,
+            &BorderChangeOnActive,
+            &RadioButtonElement,
+        ),
+        Changed<RadioButtonElement>,
+    >,
+) {
+    for (mut style, mut border, effects, radio) in query_selected.iter_mut() {
+        if radio.selected {
+            style.border = UiRect::all(effects.focused_thickness);
+            *border = effects.focused_color.into();
+        } else {
+            style.border = UiRect::all(effects.unfocused_thickness);
+            *border = effects.unfocused_color.into();
+        }
     }
 }

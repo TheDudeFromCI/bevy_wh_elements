@@ -1,5 +1,7 @@
 use bevy::prelude::*;
 
+use crate::prelude::RadioButtonGroup;
+
 #[derive(Debug, Default, Component)]
 pub struct ScrollPane {
     pub position: Vec2,
@@ -28,4 +30,18 @@ impl Default for CursorTimer {
 #[derive(Debug, Default, Component)]
 pub struct FocusableElement {
     pub focused: bool,
+}
+
+#[derive(Debug, Component)]
+pub struct RadioButtonElement {
+    pub group: RadioButtonGroup,
+    pub selected: bool,
+}
+
+#[derive(Debug, Default, Component, Clone)]
+pub struct BorderChangeOnActive {
+    pub focused_color: Color,
+    pub unfocused_color: Color,
+    pub focused_thickness: Val,
+    pub unfocused_thickness: Val,
 }
