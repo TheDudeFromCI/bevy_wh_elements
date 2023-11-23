@@ -35,6 +35,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhTextInput<ContainerFlags, Text
             },
             text: NodeText {
                 text: "".into(),
+                alignment: TextAlignment::Left,
                 ..default()
             },
         })
@@ -51,6 +52,11 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
         parent: Option<Entity>,
     ) {
         self.text.wrapping = !self.node.no_wrap;
+        let text_vert_align = match &self.node.alignment {
+            ElementAlignment::Left => AlignSelf::FlexStart,
+            ElementAlignment::Center => AlignSelf::Center,
+            ElementAlignment::Right => AlignSelf::FlexEnd,
+        };
 
         let mut cmd = self.node.build_entity(commands, loader);
         cmd.insert(self.container_flags);
@@ -59,6 +65,22 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
         if let Some(parent) = parent {
             cmd.set_parent(parent);
         }
+
+        let mut cmd = commands.spawn(NodeBundle {
+            style: Style {
+                position_type: PositionType::Absolute,
+                overflow: Overflow::clip(),
+                align_self: text_vert_align,
+                justify_content: JustifyContent::FlexEnd,
+                align_content: AlignContent::Center,
+                flex_direction: FlexDirection::Row,
+                max_width: Val::Percent(100.0),
+                ..default()
+            },
+            ..default()
+        });
+        cmd.set_parent(container_id);
+        let overflow_id = cmd.id();
 
         let text_style = TextStyle {
             font: match self.text.font {
@@ -94,7 +116,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
                             value: "}".to_string(),
                             style: TextStyle {
                                 font: CURSOR_HANDLE,
-                                color: Color::BLACK,
+                                color: Color::NONE,
                                 ..text_style.clone()
                             },
                         },
@@ -107,6 +129,6 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
                 ..default()
             },
         ));
-        cmd.set_parent(container_id);
+        cmd.set_parent(overflow_id);
     }
 }
