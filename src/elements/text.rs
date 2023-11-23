@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::prelude::{NodeText, WhElement, WhNode};
+use crate::prelude::{ElementDirection, NodeText, WhElement, WhNode};
 use crate::{build_node_field, build_text_field};
 
 pub struct WhText<ContainerFlags: Bundle, TextFlags: Bundle> {
@@ -18,7 +18,10 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhText<ContainerFlags, TextFlags
         Box::new(Self {
             container_flags,
             text_flags,
-            node: WhNode::default(),
+            node: WhNode {
+                direction: ElementDirection::Row,
+                ..default()
+            },
             text: Default::default(),
         })
     }
