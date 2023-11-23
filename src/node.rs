@@ -103,15 +103,15 @@ impl WhNode {
                         selected: false,
                     },
                 ));
-
-                if let Some(active) = self.active_border {
-                    cmd.insert(active);
-                }
             }
             NodeInteraction::Focusable => {
                 cmd.insert((Button, Interaction::default(), FocusableElement::default()));
             }
         };
+
+        if let Some(active) = self.active_border {
+            cmd.insert(active);
+        }
     }
 
     pub fn build_style(&self) -> Style {

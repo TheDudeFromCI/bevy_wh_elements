@@ -67,15 +67,14 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
             ElementAlignment::Right => AlignSelf::FlexEnd,
         };
 
-        let mut cmd = self.node.build_entity(commands, loader);
-        cmd.insert(self.container_flags);
-        let container_id = cmd.id();
-
+        let mut container_cmd = self.node.build_entity(commands, loader);
+        container_cmd.insert(self.container_flags);
+        let container_id = container_cmd.id();
         if let Some(parent) = parent {
-            cmd.set_parent(parent);
+            container_cmd.set_parent(parent);
         }
 
-        let mut cmd = commands.spawn(NodeBundle {
+        let mut overflow_cmd = commands.spawn(NodeBundle {
             style: Style {
                 position_type: PositionType::Absolute,
                 overflow: Overflow::clip(),
@@ -88,8 +87,8 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
             },
             ..default()
         });
-        cmd.set_parent(container_id);
-        let overflow_id = cmd.id();
+        overflow_cmd.set_parent(container_id);
+        let overflow_id = overflow_cmd.id();
 
         let text_style = TextStyle {
             font: match self.text.font {
@@ -100,7 +99,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
             color: self.text.color,
         };
 
-        let mut cmd = commands.spawn((
+        let mut text_cmd = commands.spawn((
             self.text_flags,
             TextInput::default(),
             CursorTimer::default(),
@@ -141,6 +140,6 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
                 ..default()
             },
         ));
-        cmd.set_parent(overflow_id);
+        text_cmd.set_parent(overflow_id);
     }
 }

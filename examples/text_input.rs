@@ -41,6 +41,7 @@ fn ui() -> BoxedElement {
                                 .border(Color::DARK_GRAY, Val::Px(2.0))
                                 .size(Val::Percent(100.0), Val::Px(30.0))
                                 .margin(UiRect::bottom(Val::Px(10.0)))
+                                .change_border_on_active(Color::GRAY, Val::Px(2.0))
                                 .text("Please enter username")
                                 .no_wrap(),
                             WhText::new()
@@ -53,6 +54,7 @@ fn ui() -> BoxedElement {
                                 .border(Color::DARK_GRAY, Val::Px(2.0))
                                 .size(Val::Percent(100.0), Val::Px(30.0))
                                 .margin(UiRect::bottom(Val::Px(10.0)))
+                                .change_border_on_active(Color::GRAY, Val::Px(2.0))
                                 .text("Please enter password")
                                 .no_wrap(),
                             WhDiv::new()
@@ -86,6 +88,7 @@ fn ui() -> BoxedElement {
                             .border(Color::DARK_GRAY, Val::Px(2.0))
                             .size(Val::Percent(100.0), Val::Px(200.0))
                             .margin(UiRect::bottom(Val::Px(10.0)))
+                            .change_border_on_active(Color::GRAY, Val::Px(2.0))
                             .text("Please enter review")
                             .justify(ElementAlignment::Left)
                             .align(ElementAlignment::Top),
