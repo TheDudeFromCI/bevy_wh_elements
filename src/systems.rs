@@ -2,7 +2,7 @@ use bevy::input::keyboard::KeyboardInput;
 use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
 use bevy::prelude::*;
 
-use crate::prelude::{ScrollPane, TextInput};
+use crate::prelude::{CursorTimer, ScrollPane, TextInput};
 
 pub(super) fn mouse_scroll_pane(
     query_node: Query<&Node>,
@@ -99,6 +99,29 @@ pub(super) fn keyboard_text_input(
             } else {
                 text.sections[1].value = "|".to_string();
             }
+        }
+    }
+}
+
+pub(super) fn text_cursor_blinker(
+    time: Res<Time>,
+    mut query_text_input: Query<(&mut CursorTimer, &mut Text, &TextInput)>,
+) {
+    for (mut timer, mut text, text_input) in query_text_input.iter_mut() {
+        if text_input.active != timer.was_active {
+            timer.timer.reset();
+            timer.was_active = text_input.active;
+        } else if !timer.timer.tick(time.delta()).just_finished() {
+            continue;
+        }
+
+        let cursor_color = text.sections[1].style.color;
+        let text_color = text.sections[0].style.color;
+
+        if !text_input.active || cursor_color != Color::NONE {
+            text.sections[1].style.color = Color::NONE;
+        } else {
+            text.sections[1].style.color = text_color;
         }
     }
 }

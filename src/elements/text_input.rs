@@ -1,7 +1,15 @@
 use bevy::prelude::*;
 use bevy::text::BreakLineOn;
 
-use crate::prelude::{ElementAlignment, ElementDirection, NodeText, TextInput, WhElement, WhNode};
+use crate::prelude::{
+    CursorTimer,
+    ElementAlignment,
+    ElementDirection,
+    NodeText,
+    TextInput,
+    WhElement,
+    WhNode,
+};
 use crate::{build_node_field, build_text_field, CURSOR_HANDLE};
 
 pub struct WhTextInput<ContainerFlags: Bundle, TextFlags: Bundle> {
@@ -64,6 +72,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
         let mut cmd = commands.spawn((
             self.text_flags,
             TextInput { active: true },
+            CursorTimer::default(),
             TextBundle {
                 style: Style {
                     align_content: AlignContent::Center,

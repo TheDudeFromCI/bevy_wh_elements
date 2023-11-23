@@ -27,7 +27,11 @@ impl Plugin for WhElementsPlugin {
 
         app.add_systems(
             Update,
-            (systems::mouse_scroll_pane, systems::keyboard_text_input),
+            (
+                systems::mouse_scroll_pane,
+                systems::keyboard_text_input,
+                systems::text_cursor_blinker,
+            ),
         );
     }
 }
