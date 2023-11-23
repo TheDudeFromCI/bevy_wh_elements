@@ -24,3 +24,8 @@ impl Default for CursorTimer {
         }
     }
 }
+
+#[derive(Debug, Default, Component)]
+pub struct FocusableElement {
+    pub focused: bool,
+}

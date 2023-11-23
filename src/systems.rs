@@ -2,7 +2,7 @@ use bevy::input::keyboard::KeyboardInput;
 use bevy::input::mouse::{MouseScrollUnit, MouseWheel};
 use bevy::prelude::*;
 
-use crate::prelude::{CursorTimer, ScrollPane, TextInput};
+use crate::prelude::{CursorTimer, FocusableElement, ScrollPane, TextInput};
 
 pub(super) fn mouse_scroll_pane(
     query_node: Query<&Node>,
@@ -37,7 +37,7 @@ pub(super) fn mouse_scroll_pane(
 pub(super) fn keyboard_text_input(
     mut keyboard_evs: EventReader<KeyboardInput>,
     mut character_evs: EventReader<ReceivedCharacter>,
-    mut query_text_input: Query<(&mut Text, &mut TextInput)>,
+    mut query_text_input: Query<(&mut Text, &TextInput)>,
 ) {
     if keyboard_evs.is_empty() && character_evs.is_empty() {
         return;
@@ -71,15 +71,12 @@ pub(super) fn keyboard_text_input(
             continue;
         }
 
-        for (mut text, mut text_input) in query_text_input.iter_mut() {
-            if !text_input.active {
+        for (mut text, focus) in query_text_input.iter_mut() {
+            if !focus.active {
                 continue;
             }
 
             match ev.key_code {
-                Some(KeyCode::Escape) => {
-                    text_input.active = false;
-                }
                 Some(KeyCode::Left) => {
                     if let Some(behind) = text.sections[0].value.pop() {
                         text.sections[2].value.insert(0, behind);
@@ -123,5 +120,61 @@ pub(super) fn text_cursor_blinker(
         } else {
             text.sections[1].style.color = text_color;
         }
+    }
+}
+
+#[allow(clippy::type_complexity)]
+pub(super) fn focus_on_element(
+    query_pressed_focus: Query<
+        (Entity, &Interaction),
+        (Changed<Interaction>, With<FocusableElement>),
+    >,
+    mut query_focusable: Query<(Entity, &mut FocusableElement)>,
+) {
+    let mut focused = None;
+    for (entity, interaction) in query_pressed_focus.iter() {
+        if let Interaction::Pressed = interaction {
+            focused = Some(entity);
+        }
+    }
+
+    if let Some(focused) = focused {
+        for (entity, mut focusable) in query_focusable.iter_mut() {
+            focusable.focused = entity == focused;
+        }
+        info!("focused: {:?}", focused);
+    }
+}
+
+pub(super) fn unfocus_elements(
+    mut keyboard_evs: EventReader<KeyboardInput>,
+    mut query_focusable: Query<&mut FocusableElement>,
+) {
+    if keyboard_evs
+        .read()
+        .any(|ev| ev.key_code == Some(KeyCode::Escape))
+    {
+        for mut focusable in query_focusable.iter_mut() {
+            focusable.focused = false;
+        }
+        info!("unfocused all");
+    }
+}
+
+pub(super) fn text_input_from_focus(
+    query_hierarchy: Query<&Parent>,
+    query_focusable: Query<&FocusableElement>,
+    mut query_text_input: Query<(&mut TextInput, &Parent)>,
+) {
+    for (mut text_input, parent) in query_text_input.iter_mut() {
+        let overflow_id = parent.get();
+        let container_id = query_hierarchy.get(overflow_id).unwrap().get();
+        let focusable = query_focusable.get(container_id).unwrap();
+
+        if text_input.active != focusable.focused {
+            info!("text_input.active: {:?}", focusable.focused);
+        }
+
+        text_input.active = focusable.focused;
     }
 }

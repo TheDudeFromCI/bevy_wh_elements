@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::build_children_field;
-use crate::prelude::{BoxedElement, WhElement};
+use crate::prelude::{BoxedElement, FocusableElement, WhElement};
 
 pub struct WhCanvas<Flags: Bundle> {
     pub flags: Flags,
@@ -34,6 +34,9 @@ impl<Flags: Bundle> WhElement for WhCanvas<Flags> {
     ) {
         let mut cmd = commands.spawn((
             self.flags,
+            Button,
+            Interaction::default(),
+            FocusableElement::default(),
             NodeBundle {
                 style: Style {
                     flex_direction: FlexDirection::Column,

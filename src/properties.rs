@@ -7,6 +7,7 @@ pub enum NodeInteraction {
     Radio(RadioButtonGroup),
     Button,
     Checkbox,
+    Focusable,
 }
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]

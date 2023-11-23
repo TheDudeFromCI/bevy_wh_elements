@@ -28,12 +28,32 @@ impl Plugin for WhElementsPlugin {
         app.add_systems(
             Update,
             (
-                systems::mouse_scroll_pane,
-                systems::keyboard_text_input,
-                systems::text_cursor_blinker,
+                systems::mouse_scroll_pane.in_set(SystemSets::UserInteraction),
+                systems::keyboard_text_input.in_set(SystemSets::UserInteraction),
+                systems::text_cursor_blinker.in_set(SystemSets::Animations),
+                systems::focus_on_element.in_set(SystemSets::UpdateFocus),
+                systems::unfocus_elements.in_set(SystemSets::UpdateFocus),
+                systems::text_input_from_focus.in_set(SystemSets::InheritFocus),
             ),
+        )
+        .configure_sets(
+            Update,
+            (
+                SystemSets::UpdateFocus,
+                SystemSets::InheritFocus,
+                SystemSets::UserInteraction,
+            )
+                .chain(),
         );
     }
+}
+
+#[derive(Debug, SystemSet, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum SystemSets {
+    UserInteraction,
+    UpdateFocus,
+    InheritFocus,
+    Animations,
 }
 
 pub mod prelude {

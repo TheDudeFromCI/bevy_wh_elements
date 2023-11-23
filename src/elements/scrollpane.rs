@@ -148,13 +148,7 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
         ));
         match self.node.interaction {
             NodeInteraction::None => {}
-            NodeInteraction::Radio(_) => {
-                cmd.insert(Button);
-            }
-            NodeInteraction::Button => {
-                cmd.insert(Button);
-            }
-            NodeInteraction::Checkbox => {
+            _ => {
                 cmd.insert(Button);
             }
         };

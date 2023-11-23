@@ -5,6 +5,7 @@ use crate::prelude::{
     CursorTimer,
     ElementAlignment,
     ElementDirection,
+    NodeInteraction,
     NodeText,
     TextInput,
     WhElement,
@@ -38,6 +39,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhTextInput<ContainerFlags, Text
                 justify: ElementAlignment::Left,
                 alignment: ElementAlignment::Center,
                 padding: UiRect::all(Val::Px(2.0)),
+                interaction: NodeInteraction::Focusable,
                 ..default()
             },
             text: NodeText {
@@ -100,7 +102,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
 
         let mut cmd = commands.spawn((
             self.text_flags,
-            TextInput { active: true },
+            TextInput::default(),
             CursorTimer::default(),
             TextBundle {
                 style: Style {

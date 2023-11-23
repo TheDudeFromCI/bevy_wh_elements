@@ -3,6 +3,7 @@ use bevy::prelude::*;
 use bevy::ui::FocusPolicy;
 
 use super::properties::*;
+use crate::prelude::FocusableElement;
 
 pub struct WhNode {
     pub bg_color: Color,
@@ -78,13 +79,10 @@ impl WhNode {
 
         match self.interaction {
             NodeInteraction::None => {}
-            NodeInteraction::Radio(_) => {
-                cmd.insert((Button, Interaction::default()));
+            NodeInteraction::Focusable => {
+                cmd.insert((Button, FocusableElement::default(), Interaction::default()));
             }
-            NodeInteraction::Button => {
-                cmd.insert((Button, Interaction::default()));
-            }
-            NodeInteraction::Checkbox => {
+            _ => {
                 cmd.insert((Button, Interaction::default()));
             }
         };
