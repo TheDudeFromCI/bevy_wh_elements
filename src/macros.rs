@@ -114,6 +114,11 @@ macro_rules! build_node_field {
             });
             self
         }
+
+        pub fn absolute_position(mut self: Box<Self>) -> Box<Self> {
+            self.$field.position_type = bevy::prelude::PositionType::Absolute;
+            self
+        }
     };
 }
 
