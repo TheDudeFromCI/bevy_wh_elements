@@ -5,7 +5,8 @@
 
 ---
 
-***Note:* This project is still considered a proof of concept at this time. As such, there are currently no plans to upload this version of the library to `crates.io` until a cleaner and more well defined version of this codebase are written. This project will also only attempt to maintain the codebase for the latest version of `Bevy`. This package mainly exists for usage within the **Wraithaven** library ecosystem.**
+> [!NOTE]
+> This project is still considered a proof of concept at this time. As such, there are currently no plans to upload this version of the library to `crates.io` until a cleaner and more well defined version of this codebase are written. This project will also only attempt to maintain the codebase for the latest version of `Bevy`. This package mainly exists for usage within the **Wraithaven** library ecosystem.
 
 ## Getting Started
 
