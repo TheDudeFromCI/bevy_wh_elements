@@ -1,12 +1,15 @@
+use std::sync::Arc;
+
 use bevy::prelude::*;
 
-use crate::prelude::{BoxedElement, NodeInteraction, WhElement, WhNode};
+use crate::prelude::{BoxedElement, NodeInteraction, OnClickCommandActions, WhElement, WhNode};
 use crate::{build_children_field, build_node_field};
 
 pub struct WhButton<Flags: Bundle> {
     pub flags: Flags,
     pub node: WhNode,
     pub children: Vec<BoxedElement>,
+    pub on_click: OnClickCommandActions,
 }
 
 impl WhButton<()> {
@@ -27,7 +30,15 @@ impl<Flags: Bundle> WhButton<Flags> {
                 ..default()
             },
             children: Default::default(),
+            on_click: Default::default(),
         })
+    }
+
+    pub fn on_click<E: Event + Clone>(mut self: Box<Self>, event: E) -> Box<Self> {
+        self.on_click.actions.push(Arc::new(move |world| {
+            world.send_event(event.clone());
+        }));
+        self
     }
 }
 
@@ -39,7 +50,7 @@ impl<Flags: Bundle> WhElement for WhButton<Flags> {
         parent: Option<Entity>,
     ) {
         let mut cmd = self.node.build_entity(commands, loader);
-        cmd.insert(self.flags);
+        cmd.insert((self.flags, self.on_click));
 
         if let Some(parent) = parent {
             cmd.set_parent(parent);

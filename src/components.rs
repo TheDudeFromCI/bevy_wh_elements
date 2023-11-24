@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use bevy::prelude::*;
 
 use crate::prelude::{RadioButtonGroup, ScreenGroup, ScreenID};
@@ -52,3 +54,9 @@ pub struct ToggleScreen {
     pub screen_id: ScreenID,
     pub group: Option<ScreenGroup>,
 }
+
+#[derive(Default, Component)]
+pub struct OnClickCommandActions {
+    pub actions: Vec<Arc<CommandAction>>,
+}
+type CommandAction = dyn Fn(&mut World) + Send + Sync + 'static;

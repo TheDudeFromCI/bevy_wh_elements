@@ -6,6 +6,7 @@ use crate::prelude::{
     BorderChangeOnActive,
     CursorTimer,
     FocusableElement,
+    OnClickCommandActions,
     RadioButtonElement,
     ScrollPane,
     SetScreenInGroup,
@@ -292,6 +293,20 @@ pub(super) fn toggle_screen_group_listener(
                 } else {
                     Display::None
                 };
+            }
+        }
+    }
+}
+
+pub(super) fn on_click_command_actions(
+    query_on_click: Query<(&OnClickCommandActions, &Interaction), Changed<Interaction>>,
+    mut commands: Commands,
+) {
+    for (on_click, interaction) in query_on_click.iter() {
+        if let Interaction::Pressed = interaction {
+            for action in on_click.actions.iter() {
+                let a = (*action).clone();
+                commands.add(move |world: &mut World| a(world));
             }
         }
     }

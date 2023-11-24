@@ -38,6 +38,7 @@ impl Plugin for WhElementsPlugin {
                     systems::mouse_scroll_pane.in_set(SystemSets::UserInteraction),
                     systems::keyboard_text_input.in_set(SystemSets::UserInteraction),
                     systems::select_radio_button.in_set(SystemSets::UserInteraction),
+                    systems::on_click_command_actions.in_set(SystemSets::UserInteraction),
                     systems::text_cursor_blinker.in_set(SystemSets::Animations),
                     systems::change_border_on_focus.in_set(SystemSets::Animations),
                     systems::change_border_on_radio.in_set(SystemSets::Animations),
