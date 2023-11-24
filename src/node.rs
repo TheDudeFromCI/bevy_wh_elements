@@ -24,6 +24,8 @@ pub struct WhNode {
     pub aspect_ratio: Option<f32>,
     pub interaction: NodeInteraction,
     pub active_border: Option<BorderChangeOnActive>,
+    pub display: Display,
+    pub position_type: PositionType,
 }
 
 impl Default for WhNode {
@@ -46,6 +48,8 @@ impl Default for WhNode {
             aspect_ratio: Default::default(),
             interaction: Default::default(),
             active_border: Default::default(),
+            display: Display::Flex,
+            position_type: PositionType::Relative,
         }
     }
 }
@@ -138,6 +142,8 @@ impl WhNode {
         };
 
         Style {
+            display: self.display,
+            position_type: self.position_type,
             flex_direction,
             flex_wrap,
             justify_content,

@@ -21,7 +21,7 @@ fn init(asset_server: Res<AssetServer>, mut commands: Commands) {
 fn ui() -> BoxedElement {
     WhCanvas::new() //
         .add_child(
-            WhScreen::new() //
+            WhScreen::new(ScreenID(1)) //
                 .bg_img("bg.png")
                 .add_child(
                     WhScrollPane::new()

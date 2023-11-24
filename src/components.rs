@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::prelude::RadioButtonGroup;
+use crate::prelude::{RadioButtonGroup, ScreenGroup, ScreenID};
 
 #[derive(Debug, Default, Component)]
 pub struct ScrollPane {
@@ -44,4 +44,11 @@ pub struct BorderChangeOnActive {
     pub unfocused_color: Color,
     pub focused_thickness: Val,
     pub unfocused_thickness: Val,
+}
+
+#[derive(Debug, Default, Component)]
+pub struct ToggleScreen {
+    pub active: bool,
+    pub screen_id: ScreenID,
+    pub group: Option<ScreenGroup>,
 }

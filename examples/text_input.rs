@@ -21,7 +21,7 @@ fn init(asset_server: Res<AssetServer>, mut commands: Commands) {
 fn ui() -> BoxedElement {
     WhCanvas::new() //
         .add_child(
-            WhScreen::new()
+            WhScreen::new(ScreenID(1)) //
                 .bg_img("bg.png")
                 .direction(ElementDirection::Row, Val::Px(100.0))
                 .add_children(vec![

@@ -8,7 +8,10 @@ use crate::prelude::{
     FocusableElement,
     RadioButtonElement,
     ScrollPane,
+    SetScreenInGroup,
+    SetScreenVisible,
     TextInput,
+    ToggleScreen,
 };
 
 pub(super) fn mouse_scroll_pane(
@@ -254,6 +257,42 @@ pub(super) fn change_border_on_radio(
         } else {
             style.border = UiRect::all(effects.unfocused_thickness);
             *border = effects.unfocused_color.into();
+        }
+    }
+}
+
+pub(super) fn toggle_screen_listener(
+    mut query_screens: Query<(&mut ToggleScreen, &mut Style)>,
+    mut set_screen_visible_evs: EventReader<SetScreenVisible>,
+) {
+    for ev in set_screen_visible_evs.read() {
+        for (mut screen, mut style) in query_screens.iter_mut() {
+            if screen.screen_id == ev.screen_id {
+                screen.active = ev.visible;
+                style.display = if ev.visible {
+                    Display::Flex
+                } else {
+                    Display::None
+                };
+            }
+        }
+    }
+}
+
+pub(super) fn toggle_screen_group_listener(
+    mut query_screens: Query<(&mut ToggleScreen, &mut Style)>,
+    mut set_screen_in_group_evs: EventReader<SetScreenInGroup>,
+) {
+    for ev in set_screen_in_group_evs.read() {
+        for (mut screen, mut style) in query_screens.iter_mut() {
+            if screen.group == Some(ev.group) {
+                screen.active = screen.screen_id == ev.screen_id;
+                style.display = if screen.active {
+                    Display::Flex
+                } else {
+                    Display::None
+                };
+            }
         }
     }
 }

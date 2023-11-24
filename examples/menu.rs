@@ -55,7 +55,7 @@ fn pressed_quit(ui: Query<&Interaction, (Changed<Interaction>, With<QuitButton>)
 fn ui() -> BoxedElement {
     WhCanvas::new() //
         .add_child(
-            WhScreen::new()
+            WhScreen::new(ScreenID(1))
                 .bg_img("bg.png")
                 .direction(ElementDirection::Row, Val::Px(0.0))
                 .justify(ElementAlignment::Left)

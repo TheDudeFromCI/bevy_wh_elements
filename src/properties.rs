@@ -1,5 +1,14 @@
 use bevy::prelude::*;
 
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct RadioButtonGroup(pub u64);
+
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct ScreenID(pub u64);
+
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct ScreenGroup(pub u64);
+
 #[derive(Debug, Default, Clone)]
 pub enum NodeInteraction {
     #[default]
@@ -9,9 +18,6 @@ pub enum NodeInteraction {
     Checkbox,
     Focusable,
 }
-
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct RadioButtonGroup(pub u64);
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ElementDirection {
