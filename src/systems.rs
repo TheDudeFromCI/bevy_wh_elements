@@ -57,14 +57,14 @@ pub(super) fn mouse_scroll_pane(
 pub(super) fn keyboard_text_input(
     mut keyboard_evs: EventReader<KeyboardInput>,
     mut character_evs: EventReader<ReceivedCharacter>,
-    mut query_text_input: Query<(&mut Text, &TextInput)>,
+    mut query_text_input: Query<(&mut Text, &mut TextInput)>,
 ) {
     if keyboard_evs.is_empty() && character_evs.is_empty() {
         return;
     }
 
     for ev in character_evs.read() {
-        for (mut text, text_input) in query_text_input.iter_mut() {
+        for (mut text, mut text_input) in query_text_input.iter_mut() {
             if !text_input.active {
                 continue;
             }
@@ -73,14 +73,23 @@ pub(super) fn keyboard_text_input(
                 // Backspace key
                 '\u{8}' => {
                     text.sections[0].value.pop();
+
+                    let full_text = text.sections[0].value.clone() + &text.sections[2].value;
+                    text_input.set_text(full_text);
                 }
                 // Delete key
                 '\u{7f}' => {
                     text.sections[2].value = text.sections[2].value.chars().skip(1).collect();
+
+                    let full_text = text.sections[0].value.clone() + &text.sections[2].value;
+                    text_input.set_text(full_text);
                 }
                 '\r' => (),
                 c => {
                     text.sections[0].value.push(c);
+
+                    let full_text = text.sections[0].value.clone() + &text.sections[2].value;
+                    text_input.set_text(full_text);
                 }
             };
         }
@@ -91,8 +100,8 @@ pub(super) fn keyboard_text_input(
             continue;
         }
 
-        for (mut text, focus) in query_text_input.iter_mut() {
-            if !focus.active {
+        for (mut text, text_input) in query_text_input.iter_mut() {
+            if !text_input.active {
                 continue;
             }
 

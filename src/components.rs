@@ -12,6 +12,17 @@ pub struct ScrollPane {
 #[derive(Debug, Default, Component)]
 pub struct TextInput {
     pub active: bool,
+    cur_text: String,
+}
+
+impl TextInput {
+    pub fn current_text(&self) -> &str {
+        &self.cur_text
+    }
+
+    pub(crate) fn set_text(&mut self, text: String) {
+        self.cur_text = text;
+    }
 }
 
 #[derive(Debug, Component)]
