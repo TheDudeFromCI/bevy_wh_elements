@@ -13,6 +13,7 @@ pub struct ScrollPane {
 pub struct TextInput {
     pub active: bool,
     cur_text: String,
+    clear: bool,
 }
 
 impl TextInput {
@@ -20,8 +21,21 @@ impl TextInput {
         &self.cur_text
     }
 
+    pub fn clear(&mut self) {
+        self.clear = true;
+    }
+
+    pub fn should_clear(&self) -> bool {
+        self.clear
+    }
+
     pub(crate) fn set_text(&mut self, text: String) {
         self.cur_text = text;
+    }
+
+    pub(crate) fn set_cleared(&mut self) {
+        self.clear = false;
+        self.cur_text = String::new();
     }
 }
 

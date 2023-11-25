@@ -59,6 +59,14 @@ pub(super) fn keyboard_text_input(
     mut character_evs: EventReader<ReceivedCharacter>,
     mut query_text_input: Query<(&mut Text, &mut TextInput)>,
 ) {
+    for (mut text, mut text_input) in query_text_input.iter_mut() {
+        if text_input.should_clear() {
+            text.sections[0].value.clear();
+            text.sections[2].value.clear();
+            text_input.set_cleared();
+        }
+    }
+
     if keyboard_evs.is_empty() && character_evs.is_empty() {
         return;
     }
