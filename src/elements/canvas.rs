@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::build_children_field;
-use crate::prelude::{BoxedElement, FocusableElement, WhElement};
+use crate::prelude::{AssetReference, BoxedElement, FocusableElement, WhElement};
 
 pub struct WhCanvas<Flags: Bundle> {
     pub flags: Flags,
@@ -29,7 +29,7 @@ impl<Flags: Bundle> WhElement for WhCanvas<Flags> {
     fn build_child(
         self: Box<Self>,
         commands: &mut Commands,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
         parent: Option<Entity>,
     ) {
         let mut cmd = commands.spawn((

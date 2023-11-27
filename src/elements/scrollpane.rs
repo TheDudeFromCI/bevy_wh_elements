@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use bevy::ui::FocusPolicy;
 
 use crate::prelude::{
+    AssetReference,
     BoxedElement,
     ElementAlignment,
     ElementDirection,
@@ -114,7 +115,7 @@ impl<ContainerFlags: Bundle, PanelFlags: Bundle> WhElement
     fn build_child(
         self: Box<Self>,
         commands: &mut Commands,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
         parent: Option<Entity>,
     ) {
         let interaction_clone = self.node.clone();

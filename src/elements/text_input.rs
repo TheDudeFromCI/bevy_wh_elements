@@ -2,6 +2,7 @@ use bevy::prelude::*;
 use bevy::text::BreakLineOn;
 
 use crate::prelude::{
+    AssetReference,
     CursorTimer,
     ElementAlignment,
     ElementDirection,
@@ -57,7 +58,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement
     fn build_child(
         mut self: Box<Self>,
         commands: &mut Commands,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
         parent: Option<Entity>,
     ) {
         self.text.wrapping = !self.node.no_wrap;

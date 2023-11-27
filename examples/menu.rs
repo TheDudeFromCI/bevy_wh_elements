@@ -25,7 +25,9 @@ struct QuitButton;
 
 fn init(asset_server: Res<AssetServer>, mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
-    ui().build(&mut commands, &asset_server);
+
+    let mut loader = AssetReference::new(&asset_server);
+    ui().build(&mut commands, &mut loader);
 }
 
 fn pressed_start(ui: Query<&Interaction, (Changed<Interaction>, With<StartButton>)>) {

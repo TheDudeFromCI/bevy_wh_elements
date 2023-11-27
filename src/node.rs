@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use bevy::ui::FocusPolicy;
 
 use super::properties::*;
-use crate::prelude::{BorderChangeOnActive, FocusableElement, RadioButtonElement};
+use crate::prelude::{AssetReference, BorderChangeOnActive, FocusableElement, RadioButtonElement};
 
 #[derive(Debug, Clone)]
 pub struct WhNode {
@@ -58,7 +58,7 @@ impl WhNode {
     pub fn build_entity<'w, 's, 'a>(
         self,
         commands: &'a mut Commands<'w, 's>,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
     ) -> EntityCommands<'w, 's, 'a> {
         let style = self.build_style();
         let interaction_clone = self.clone();

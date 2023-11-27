@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::prelude::{ElementDirection, NodeText, WhElement, WhNode};
+use crate::prelude::{AssetReference, ElementDirection, NodeText, WhElement, WhNode};
 use crate::{build_node_field, build_text_field};
 
 pub struct WhText<ContainerFlags: Bundle, TextFlags: Bundle> {
@@ -37,7 +37,7 @@ impl<ContainerFlags: Bundle, TextFlags: Bundle> WhElement for WhText<ContainerFl
     fn build_child(
         mut self: Box<Self>,
         commands: &mut Commands,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
         parent: Option<Entity>,
     ) {
         self.text.wrapping = !self.node.no_wrap;

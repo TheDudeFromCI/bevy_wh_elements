@@ -15,7 +15,9 @@ fn main() {
 
 fn init(asset_server: Res<AssetServer>, mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
-    ui().build(&mut commands, &asset_server);
+
+    let mut loader = AssetReference::new(&asset_server);
+    ui().build(&mut commands, &mut loader);
 }
 
 fn ui() -> BoxedElement {

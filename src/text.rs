@@ -2,6 +2,8 @@ use bevy::ecs::system::EntityCommands;
 use bevy::prelude::*;
 use bevy::text::BreakLineOn;
 
+use crate::prelude::AssetReference;
+
 #[derive(Debug, Clone)]
 pub struct NodeText {
     pub font: Option<String>,
@@ -29,7 +31,7 @@ impl NodeText {
     pub fn build_entity<'w, 's, 'a>(
         self,
         commands: &'a mut Commands<'w, 's>,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
     ) -> EntityCommands<'w, 's, 'a> {
         commands.spawn(TextBundle {
             style: Style {

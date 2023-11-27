@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::prelude::{BoxedElement, WhElement, WhNode};
+use crate::prelude::{AssetReference, BoxedElement, WhElement, WhNode};
 use crate::{build_children_field, build_node_field};
 
 pub struct WhDiv<Flags: Bundle> {
@@ -32,7 +32,7 @@ impl<Flags: Bundle> WhElement for WhDiv<Flags> {
     fn build_child(
         self: Box<Self>,
         commands: &mut Commands,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
         parent: Option<Entity>,
     ) {
         let mut cmd = self.node.build_entity(commands, loader);

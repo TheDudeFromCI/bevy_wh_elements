@@ -1,6 +1,14 @@
 use bevy::prelude::*;
 
-use crate::prelude::{BoxedElement, ScreenGroup, ScreenID, ToggleScreen, WhElement, WhNode};
+use crate::prelude::{
+    AssetReference,
+    BoxedElement,
+    ScreenGroup,
+    ScreenID,
+    ToggleScreen,
+    WhElement,
+    WhNode,
+};
 use crate::{build_children_field, build_node_field};
 
 pub struct WhScreen<Flags: Bundle> {
@@ -52,7 +60,7 @@ impl<Flags: Bundle> WhElement for WhScreen<Flags> {
     fn build_child(
         self: Box<Self>,
         commands: &mut Commands,
-        loader: &AssetServer,
+        loader: &mut AssetReference,
         parent: Option<Entity>,
     ) {
         let shown = self.node.display == Display::Flex;

@@ -4,6 +4,7 @@ use events::{SetScreenInGroup, SetScreenVisible};
 
 mod systems;
 
+pub mod assets;
 pub mod components;
 pub mod element;
 pub mod elements;
@@ -76,6 +77,7 @@ pub enum SystemSets {
 }
 
 pub mod prelude {
+    pub use super::assets::*;
     pub use super::components::*;
     pub use super::element::*;
     pub use super::elements::*;
